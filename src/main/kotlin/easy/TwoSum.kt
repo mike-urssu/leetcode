@@ -1,7 +1,5 @@
 package easy
 
-// https://www.notion.so/TwoSum-28b0bbb0030945e88705094fe3fa5a49
-
 class TwoSum {
     fun twoSum(nums: IntArray, target: Int): IntArray {
         val solution = IntArray(2)
