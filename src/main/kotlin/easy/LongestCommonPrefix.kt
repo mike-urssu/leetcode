@@ -6,11 +6,13 @@ class LongestCommonPrefix {
 
         val shortestString = getShortestString(strs)
         for (index in shortestString.indices) {
-            if (isEveryCharacterAtThatIndexSame(strs, index))
-                commonPrefix += shortestString[index]
+            val character = shortestString[index]
+            if (strs.all { str -> str[index] == character })
+                commonPrefix += character
             else
                 break
         }
+
         return commonPrefix
     }
 
@@ -26,19 +28,5 @@ class LongestCommonPrefix {
         }
 
         return shortestString
-    }
-
-    private fun isEveryCharacterAtThatIndexSame(strs: Array<String>, index: Int): Boolean {
-        var isSame = true
-
-        val character = strs[0][index]
-        for (str in strs) {
-            if (character != str[index]) {
-                isSame = false
-                break
-            }
-        }
-
-        return isSame
     }
 }
