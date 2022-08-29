@@ -8,37 +8,51 @@
  * }
  */
 class Solution {
-    fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode {
-        val sum = getSumFromNodeList(l1) + getSumFromNodeList(l2)
-        return getNodeListFromNumber(sum)
-    }
+    private lateinit var currentListNode: ListNode
+    private var listNode1: ListNode? = null
+    private var listNode2: ListNode? = null
+    private var carry = 0
 
-    private fun getSumFromNodeList(listNode: ListNode?): BigInteger {
-        var sum = BigInteger.ZERO
-        var mul = BigInteger.ONE
-        var currentNode = listNode
+    fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
+        val listNode = ListNode(0)
+        currentListNode = listNode
+        listNode1 = l1
+        listNode2 = l2
 
-        while (currentNode != null) {
-            sum = sum.plus(BigInteger.valueOf(currentNode.`val`.toLong()).multiply(mul))
-            mul = mul.multiply(BigInteger.TEN)
-            currentNode = currentNode.next
+        while (listNode1 != null && listNode2 != null) {
+            val sum = listNode1!!.`val` + listNode2!!.`val` + carry
+            carry = sum / 10
+
+            val nextListNode = ListNode(sum % 10)
+            currentListNode.next = nextListNode
+            currentListNode = nextListNode
+
+            listNode1 = listNode1!!.next
+            listNode2 = listNode2!!.next
         }
 
-        return sum
-    }
-
-    private fun getNodeListFromNumber(number: BigInteger): ListNode {
-        val listNode = ListNode(number.mod(BigInteger.TEN).toInt())
-        var currentNode = listNode
-
-        var division = BigInteger.TEN
-        while (number.divide(division) != BigInteger.ZERO) {
-            val nextNode = ListNode(number.divide(division).mod(BigInteger.TEN).toInt())
-            currentNode.next = nextNode
-            currentNode = nextNode
-            division = division.multiply(BigInteger.TEN)
+        while (listNode1 != null) {
+            connectListNode(listNode1)
+            listNode1 = listNode1!!.next
         }
 
-        return listNode
+        while (listNode2 != null) {
+            connectListNode(listNode2)
+            listNode2 = listNode2!!.next
+        }
+
+        if (carry == 1)
+            currentListNode.next = ListNode(1)
+
+        return listNode.next
+    }
+
+    private fun connectListNode(listNode: ListNode?) {
+        val sum = listNode!!.`val` + carry
+        carry = sum / 10
+
+        val nextListNode = ListNode(sum % 10)
+        currentListNode.next = nextListNode
+        currentListNode = nextListNode
     }
 }
